@@ -6,7 +6,7 @@ public class TerminalControl : MonoBehaviour
 
 {
 
-    enum Screen { MainMenu, Password, Win,ChekNumber1,ChekNumber2,ChekNumber3};
+    enum Screen { MainMenu, Password, Win,ChekNumber1,ChekNumber2,ChekNumber3,FinishScreen};
     Screen currentScreen = Screen.MainMenu;
     const string menuHint = ("Напишите 'Меню',чтобы вернуться обратно");
     int level;
@@ -75,12 +75,31 @@ public class TerminalControl : MonoBehaviour
         else if (currentScreen == Screen.ChekNumber3)
         {
             number3 = int.Parse(input);
-            StartFinishScreen();
+            StartFinishScreen(input);
+        }
+        else if (currentScreen == Screen.FinishScreen)
+        {
+            if (input == "1")
+            {
+                Start4thGame();
+            }
+            else if (input == "0")
+            {
+                ShowMainMenu("победитель!");
+            }
         }
     
     }
 
-     void Start2ndScreen()
+    void Start4thGame()
+    {
+        Terminal.ClearScreen();
+        currentScreen = Screen.ChekNumber1;
+        Terminal.WriteLine("Введите первое число");
+
+    }
+
+    void Start2ndScreen()
     {
         currentScreen = Screen.ChekNumber2;
         Terminal.ClearScreen();
@@ -94,8 +113,9 @@ public class TerminalControl : MonoBehaviour
         Terminal.WriteLine("Введите произведение первых двух чисел:");
     }
 
-    void StartFinishScreen()
+    void StartFinishScreen(string input)
     {
+        currentScreen = Screen.FinishScreen;
         int sum;
         sum = number1 * number2;
         Terminal.ClearScreen();
@@ -103,12 +123,14 @@ public class TerminalControl : MonoBehaviour
         {
             Terminal.WriteLine("Верно бухглатерия ваша!");
             Terminal.WriteLine("Введите 0 для перехода в меню");
+            
         }
         else
         {
             Terminal.WriteLine("Неверно!");
             Terminal.WriteLine("Введите 1 чтобы попробовать снова");
         }
+      
     }
 
 
@@ -188,7 +210,8 @@ public class TerminalControl : MonoBehaviour
             break;
         }
         Terminal.WriteLine(menuHint);
-        
+
+
     }
 
 
@@ -202,14 +225,17 @@ public class TerminalControl : MonoBehaviour
         {
             case 1:
                 password = Level1Password[Random.Range(0, Level1Password.Length)];
+                Terminal.WriteLine(menuHint);
                 Terminal.WriteLine("Вы в библиотеке,будтье потише.");
                 break;
             case 2:
                 password = Level2Password[Random.Range(0, Level2Password.Length)];
+                Terminal.WriteLine(menuHint);
                 Terminal.WriteLine("Вы в полицейском участке,будтье бдительны,вас могут заметить.");
                 break;
             case 3:
                 password = Level3Password[Random.Range(0, Level3Password.Length)];
+                Terminal.WriteLine(menuHint);
                 Terminal.WriteLine("Вы на космическом корабле,до сих пор непривыкну к невисомости.");
                 break;
             case 4:
@@ -220,9 +246,6 @@ public class TerminalControl : MonoBehaviour
 
         }  
         
-        
-
-        Terminal.WriteLine(menuHint);
         if (level != 4) 
         {
             Terminal.WriteLine("Вот ваша подсказка:" + password.Anagram());
@@ -231,12 +254,7 @@ public class TerminalControl : MonoBehaviour
         
     }
 
-    void Start4thGame()
-    {
-        currentScreen = Screen.ChekNumber1;
-        Terminal.WriteLine("Введите первое число");
-
-    }
+    
 
 }
 
