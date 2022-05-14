@@ -7,6 +7,7 @@ public class TerminalControl : MonoBehaviour
 {
     enum Screen { MainMenu, Password, Win };
     Screen currentScreen = Screen.MainMenu;
+    const string menuHint = ("Напишите 'Меню',чтобы вернуться обратно");
     int level;
     string password;
     string[] Level1Password = {"Книга","Ручка","Шкаф","Буква","Слово", };
@@ -80,41 +81,86 @@ public class TerminalControl : MonoBehaviour
     {
         if (input == password)
         {
-            Terminal.WriteLine("Поздравляю!Вы успешно взломали терминал!");
+            ShowWinScreen(); 
         }
         else
         {
-            Terminal.WriteLine("Пароль - неверен.Попытайтесь вновь!");
+            GameStart();
         }
         
 
 
             }
+    void ShowWinScreen()
+    {
+         Terminal.ClearScreen();
+         currentScreen = Screen.Win;
+         switch(level)
+        {
+        case 1:
+         Terminal.WriteLine ("Пароль верный,держите книгу!");
+         Terminal.WriteLine (@"
+    _______
+   /      /,
+  /      //
+ /______//
+(______(/
+");
+        break;
+        case 2:
+            Terminal.WriteLine("Пароль верный,держите оружие,вы заслужили!");
+            Terminal.WriteLine(@"
+  _,_______
+ / __.==--)
+/#(-'
+`-'            
+            ");
+            break; 
+            case 3:
+            Terminal.WriteLine("Пароль верный, держите своего робота!");
+            Terminal.WriteLine(@"
+    .---.       
+  .'_:___'.
+  |__ --==|
+  [  ]  :[|       
+  |__| I=[|     
+  / / ____|         
+ |-/.____.'      
+/___\ /___\   
+            ");
+            break;
+        }
+        Terminal.WriteLine(menuHint);
+        
+    }
+    
+
 
     void GameStart()
     { 
+        currentScreen = Screen.Password;
+        Terminal.ClearScreen();
         switch(level)
         {
             case 1:
                 password = Level1Password[Random.Range(0, Level1Password.Length)];
+                Terminal.WriteLine("Вы в библиотеке,будтье потише.");
                 break;
             case 2:
                 password = Level2Password[Random.Range(0, Level2Password.Length)];
+                Terminal.WriteLine("Вы в полицейском участке,будтье бдительны,вас могут заметить.");
                 break;
             case 3:
                 password = Level3Password[Random.Range(0, Level3Password.Length)];
+                Terminal.WriteLine("Вы на космическом корабле,до сих пор непривыкну к невисомости.");
                 break;
         }        
-        currentScreen = Screen.Password;
-        Terminal.ClearScreen();
-        Terminal.WriteLine("Вы выбрали " + level + " уровень");
+
+        Terminal.WriteLine(menuHint);
+        Terminal.WriteLine("Вот ваша подсказка:"+ password.Anagram());
         Terminal.WriteLine("Введите пароль:");
     }
     
     }
-
-    
-
-
 
 
