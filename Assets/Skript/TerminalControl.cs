@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TerminalControl : MonoBehaviour
- 
+
 {
-    enum Screen { MainMenu, Password, Win };
+
+    enum Screen { MainMenu, Password, Win,ChekNumber1,ChekNumber2,ChekNumber3};
     Screen currentScreen = Screen.MainMenu;
     const string menuHint = ("Напишите 'Меню',чтобы вернуться обратно");
     int level;
     string password;
-    string[] Level1Password = {"Книга","Ручка","Шкаф","Буква","Слово", };
+    string[] Level1Password = { "Книга", "Ручка", "Шкаф", "Буква", "Слово", };
     string[] Level2Password = { "Дубинка", "Закон", "Оружие", "Сержант", "Арест" };
     string[] Level3Password = { "Интерстеллар", "Орион", "Космолёт", "Илон Маск", "Сатурн" };
+    int number1;
+    int number2;
+    int number3;
+
 
     // Start is called before the first frame update
     void Start()
@@ -35,9 +40,12 @@ public class TerminalControl : MonoBehaviour
         Terminal.WriteLine("Введите 1 - городская блиблиотека");
         Terminal.WriteLine("Введите 2 - полицейский участок");
         Terminal.WriteLine("Введите 3 - космический корабль");
+        Terminal.WriteLine("Введите 4 - бухгалтерия");
         Terminal.WriteLine("Ваш выбор");
 
     }
+
+
 
 
     void OnUserInput(string input)
@@ -52,12 +60,61 @@ public class TerminalControl : MonoBehaviour
         }
         else if (currentScreen == Screen.Password)
         {
-            ChekPassword(input); 
+            ChekPassword(input);
+        }
+        else if (currentScreen == Screen.ChekNumber1)
+        {
+            number1 = int.Parse(input);
+            Start2ndScreen();
+        }
+        else if (currentScreen == Screen.ChekNumber2)
+        {
+            number2 = int.Parse(input);
+            Start3rdScreen();
+        }
+        else if (currentScreen == Screen.ChekNumber3)
+        {
+            number3 = int.Parse(input);
+            StartFinishScreen();
+        }
+    
+    }
+
+     void Start2ndScreen()
+    {
+        currentScreen = Screen.ChekNumber2;
+        Terminal.ClearScreen();
+        Terminal.WriteLine("Введите второе число:");
+    }
+
+    void Start3rdScreen()
+    {
+        currentScreen = Screen.ChekNumber3;
+        Terminal.ClearScreen();
+        Terminal.WriteLine("Введите произведение первых двух чисел:");
+    }
+
+    void StartFinishScreen()
+    {
+        int sum;
+        sum = number1 * number2;
+        Terminal.ClearScreen();
+        if (number3 == sum)
+        {
+            Terminal.WriteLine("Верно бухглатерия ваша!");
+            Terminal.WriteLine("Введите 0 для перехода в меню");
+        }
+        else
+        {
+            Terminal.WriteLine("Неверно!");
+            Terminal.WriteLine("Введите 1 чтобы попробовать снова");
         }
     }
+
+
     void RunMainMenu(string input)
     {
-        bool isValidLevelNumber = (input == "1" || input == "2" || input == "3");
+        bool isValidLevelNumber = (input == "1" || input == "2" || input == "3" || input == "4");
         if (isValidLevelNumber)
         {
             level = int.Parse(input);
@@ -123,17 +180,18 @@ public class TerminalControl : MonoBehaviour
   .'_:___'.
   |__ --==|
   [  ]  :[|       
-  |__| I=[|     
-  / / ____|         
- |-/.____.'      
-/___\ /___\   
+  |__| I=[|      
             ");
+ //                 / / ____ |
+ //| -/.____.'      
+ /// ___\ / ___\  
             break;
         }
         Terminal.WriteLine(menuHint);
         
     }
-    
+
+
 
 
     void GameStart()
@@ -154,13 +212,32 @@ public class TerminalControl : MonoBehaviour
                 password = Level3Password[Random.Range(0, Level3Password.Length)];
                 Terminal.WriteLine("Вы на космическом корабле,до сих пор непривыкну к невисомости.");
                 break;
-        }        
+            case 4:
+                Start4thGame();
+                
+
+                break;
+
+        }  
+        
+        
 
         Terminal.WriteLine(menuHint);
-        Terminal.WriteLine("Вот ваша подсказка:"+ password.Anagram());
-        Terminal.WriteLine("Введите пароль:");
+        if (level != 4) 
+        {
+            Terminal.WriteLine("Вот ваша подсказка:" + password.Anagram());
+            Terminal.WriteLine("Введите пароль:");
+        }
+        
     }
-    
+
+    void Start4thGame()
+    {
+        currentScreen = Screen.ChekNumber1;
+        Terminal.WriteLine("Введите первое число");
+
     }
+
+}
 
 
